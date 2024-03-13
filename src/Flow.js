@@ -6,9 +6,7 @@ const initialNodes = [
   {
     id: "1",
     type: "text",
-    data: {
-      text: "hello",
-    },
+    data: {},
     position: { x: 0, y: 0 },
   },
   {

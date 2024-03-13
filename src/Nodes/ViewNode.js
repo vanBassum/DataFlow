@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import {
   Position,
   useReactFlow,
@@ -9,14 +9,36 @@ import {
 
 function ViewNode({ id = null }) {
   const { updateNodeData } = useReactFlow();
+  const [text, setText] = useState("");
+  const [selectedOption, setSelectedOption] = useState("text");
   const connections = useHandleConnections({ type: "target" });
   const nodesData = useNodesData(connections.map((connection) => connection.source));
 
+
+  const uint8ArrayToString = (uint8Array) => {
+    const decoder = new TextDecoder();
+    return decoder.decode(uint8Array);
+  };
+
+  const uint8ArrayToHexString = (uint8Array) => {
+    return Array.from(uint8Array)
+      .map(byte => byte.toString(16).padStart(2, '0'))
+      .join(' ');
+  }
+
+
   useEffect(() => {
+    // Input node changed
     if (id !== null) {
-      updateNodeData(id, { text: nodesData[0]?.data?.text });
+      if (selectedOption === "text") {
+        setText(uint8ArrayToString(nodesData[0]?.data?.raw));
+      } else {
+        setText(uint8ArrayToHexString(nodesData[0]?.data?.raw));
+      }
+      // Pass data along unchanged.
+      updateNodeData(id, nodesData[0]?.data);
     }
-  }, [id, nodesData]);
+  }, [id, nodesData, selectedOption, updateNodeData]);
 
   return (
     <div
@@ -33,10 +55,16 @@ function ViewNode({ id = null }) {
         position={Position.Left}
         isConnectable={connections.length === 0}
       />
-      <div style={{ marginBottom: "8px" }}>View</div>
+      <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
+        <div style={{ marginRight: "auto" }}>View</div>
+        <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
+          <option value="text">Text</option>
+          <option value="hex">Hex</option>
+        </select>
+      </div>
       <div>
-        <input
-          value={nodesData[0]?.data?.text}
+        <textarea
+          value={text}
           readOnly
           style={{ backgroundColor: "#f4f4f4", border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
         />

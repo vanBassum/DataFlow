@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import {
-  Position, NodeProps, Handle, useReactFlow
+  Position, Handle, useReactFlow
 } from "@xyflow/react";
 
 
@@ -8,11 +8,17 @@ const TextNode = ({ id, data }) => {
   const { updateNodeData } = useReactFlow();
   const [text, setText] = useState(data.text);
 
+  const stringToUint8Array = (str) => {
+    const encoder = new TextEncoder();
+    return encoder.encode(str);
+  };
+
+
+  // The input field changed
   const updateText = (text) => {
-    // Avoid jumping caret with a synchronous update
     setText(text);
-    // Update actual node data
-    updateNodeData(id, { text });
+    data.raw = stringToUint8Array(text);
+    updateNodeData(id, data);
   };
 
   return (
@@ -27,7 +33,7 @@ const TextNode = ({ id, data }) => {
     >
       <div style={{ marginBottom: "8px" }}>Input</div>
       <div>
-        <input
+        <textarea
           onChange={(event) => updateText(event.target.value)}
           value={text}
           style={{ border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
