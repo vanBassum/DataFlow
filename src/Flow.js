@@ -20,26 +20,11 @@ const initialNodes = [
     type: "view",
     data: {},
     position: { x: 300, y: 0 },
-  },
-  {
-    id: "4",
-    type: "base64",
-    option: "base64decoding",
-    data: {},
-    position: { x: 450, y: 100 },
-  },
-  {
-    id: "5",
-    type: "view",
-    data: {},
-    position: { x: 600, y: 0 },
-  },
+  }
 ];
 const initialEdges = [
-  { id: 'e-1', source: '1', target: '2' }, 
+  { id: 'e-1', source: '1', target: '2' },
   { id: 'e-2', source: '2', target: '3' },
-  { id: 'e-3', source: '3', target: '4' }, 
-  { id: 'e-4', source: '4', target: '5' },
 ];
 
 

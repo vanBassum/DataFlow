@@ -10,23 +10,32 @@ import {
 function Base64Node({ id = null }) {
   const { updateNodeData } = useReactFlow();
   const [selectedOption, setSelectedOption] = useState("base64encode");
+  const [error, setError] = useState(null);
   const connections = useHandleConnections({ type: "target" });
   const nodesData = useNodesData(connections.map((connection) => connection.source));
  
-  const stringToUint8Array = (str) => {
-    const encoder = new TextEncoder();
-    return encoder.encode(str);
-  };
-
-  function base64Encode(byteArray) {
-    const binaryString = Array.from(byteArray).map(byte => String.fromCharCode(byte)).join('');
-    return stringToUint8Array(btoa(binaryString));
+  function base64Encode(data) {
+    if (data?.value instanceof Uint8Array) {
+      setError(null);
+      const binaryString = Array.from(data.value).map(byte => String.fromCharCode(byte)).join('');
+      return {value: btoa(binaryString)};
+    }
+  
+    setError("Data '" + typeof data?.value + "' not supported");
+    return null;
   }
-
-  function base64Decode(byteArray) {
-    const binaryString = Array.from(byteArray).map(byte => String.fromCharCode(byte)).join('');
-    return stringToUint8Array(atob(binaryString));
+  
+  function base64Decode(data) {
+    if (typeof data?.value === 'string') {
+      setError(null);
+      const binaryString = atob(data.value);
+      return {value: new TextEncoder().encode(binaryString)};
+    }
+  
+    setError("Data '" + typeof data?.value + "' not supported");
+    return null;
   }
+  
 
   const options = useMemo(() => [
     { value: "base64encode", label: "Base 64 encode", handler: base64Encode  },
@@ -37,9 +46,9 @@ function Base64Node({ id = null }) {
     // Input node changed
     if (id !== null) {
       const selectedHandler = options.find(option => option.value === selectedOption)?.handler;
-      if (selectedHandler && nodesData[0]?.data?.raw) {
-        var converted = selectedHandler(nodesData[0]?.data?.raw);
-        updateNodeData(id, {raw: converted});
+      if (selectedHandler) {
+        var converted = selectedHandler(nodesData[0]?.data);
+        updateNodeData(id, converted);
       }
     }
   }, [id, nodesData, selectedOption, options, updateNodeData]);
@@ -60,12 +69,15 @@ function Base64Node({ id = null }) {
         isConnectable={connections.length === 0}
       />
       <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
-        <div style={{ marginRight: "auto" }}>View</div>
+        <div style={{ marginRight: "auto" }}>Base64</div>
         <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
           {options.map(option => (
             <option key={option.value} value={option.value}>{option.label}</option>
           ))}
         </select>
+      </div>
+      <div style={{color: '#FF0000'}}>
+        {error}
       </div>
       <Handle type="source" position={Position.Right} />
     </div>

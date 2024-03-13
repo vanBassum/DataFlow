@@ -11,34 +11,52 @@ function ViewNode({ id = null }) {
   const { updateNodeData } = useReactFlow();
   const [text, setText] = useState("");
   const [selectedOption, setSelectedOption] = useState("text");
+  const [error, setError] = useState(null);
   const connections = useHandleConnections({ type: "target" });
   const nodesData = useNodesData(connections.map((connection) => connection.source));
 
-  const uint8ArrayToString = (uint8Array) => {
-    const decoder = new TextDecoder();
-    return decoder.decode(uint8Array);
+  const asText = (data) => {
+    if (typeof data?.value === 'string') {
+      setError(null);
+      return data.value;
+    }
+  
+    if (data?.value instanceof Uint8Array) {
+      setError(null);
+      return new TextDecoder().decode(data.value);
+    }
+  
+    setError("Data '" + typeof data?.value + "' not supported");
+    return null;
   };
-
-  const uint8ArrayToHexString = (uint8Array) => {
-    return Array.from(uint8Array)
-      .map(byte => byte.toString(16).padStart(2, '0'))
-      .join(' ');
+  
+  const asHex = (data) => {
+    if (typeof data?.value === 'string') {
+      setError(null);
+      return new TextEncoder().encode(data.value).map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+    }
+  
+    if (data?.value instanceof Uint8Array) {
+      setError(null);
+      return Array.from(data.value).map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+    }
+  
+    setError("Data '" + typeof data?.value + "' not supported");
+    return null;
   }
   
+  
   const options = useMemo(() => [
-    { value: "text", label: "Text", handler: uint8ArrayToString },
-    { value: "hex", label: "Hex", handler: uint8ArrayToHexString }
+    { value: "text", label: "Text", handler: asText },
+    { value: "hex", label: "Hex", handler: asHex }
   ], []);
-
-
-
 
   useEffect(() => {
     // Input node changed
     if (id !== null) {
       const selectedHandler = options.find(option => option.value === selectedOption)?.handler;
       if (selectedHandler) {
-        setText(selectedHandler(nodesData[0]?.data?.raw));
+        setText(selectedHandler(nodesData[0]?.data));
       }
       // Pass data along unchanged.
       updateNodeData(id, nodesData[0]?.data);
@@ -75,7 +93,9 @@ function ViewNode({ id = null }) {
           style={{ backgroundColor: "#f4f4f4", border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
         />
       </div>
-
+      <div style={{color: '#FF0000'}}>
+        {error}
+      </div>
 
       <Handle type="source" position={Position.Right} />
     </div>
