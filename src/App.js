@@ -2,6 +2,7 @@ import React, { } from 'react';
 import Sidebar from './Sidebar';
 import Flow from './Flow';
 import './App.css';
+import '@xyflow/react/dist/style.css';
 
 import TextNode from "./Nodes/TextNode";
 import ViewNode from "./Nodes/ViewNode";

@@ -33,12 +33,16 @@ function ViewNode({ id = null }) {
   const asHex = (data) => {
     if (typeof data?.value === 'string') {
       setError(null);
-      return new TextEncoder().encode(data.value).map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+      const val = Array.from(data.value)
+        .map(char => char.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'))
+        .join(' ');
+      return val;
     }
+    
   
     if (data?.value instanceof Uint8Array) {
       setError(null);
-      return Array.from(data.value).map(byte => byte.toString(16).padStart(2, '0')).join(' ');
+      return Array.from(data.value).map(byte => byte.toString(16).toUpperCase().padStart(2, '0')).join(' ');
     }
   
     setError("Data '" + typeof data?.value + "' not supported");
@@ -88,7 +92,7 @@ function ViewNode({ id = null }) {
       </div>
       <div>
         <textarea
-          value={text}
+          value={text??""}
           readOnly
           style={{ backgroundColor: "#f4f4f4", border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
         />

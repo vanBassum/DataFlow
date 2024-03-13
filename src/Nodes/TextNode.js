@@ -35,7 +35,6 @@ const TextNode = ({ id }) => {
       const selectedHandler = options.find((option) => option.value === selectedOption)?.handler;
       if (selectedHandler) {
         var converted = selectedHandler(text);
-        console.log(converted);
         updateNodeData(id, converted);
       }
     }
@@ -57,7 +56,7 @@ const TextNode = ({ id }) => {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", marginBottom: "8px" }}>
-        <div style={{ marginRight: "auto" }}>Input</div>
+        <div style={{ marginRight: "auto" }}>Text</div>
         <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
           {options.map((option) => (
             <option key={option.value} value={option.value}>
@@ -69,7 +68,7 @@ const TextNode = ({ id }) => {
       <div>
         <textarea
           onChange={(event) => updateText(event.target.value)}
-          value={text}
+          value={text??""}
           style={{ border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
         />
       </div>

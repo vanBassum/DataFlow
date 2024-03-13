@@ -2,6 +2,12 @@ import React, { useState, useCallback, useRef } from 'react';
 import { ReactFlow, MiniMap, Controls, Background, useNodesState, useEdgesState, addEdge, updateEdge } from "@xyflow/react";
 import 'reactflow/dist/style.css';
 
+const styles = {
+  background: '#FBFBFB',
+  width: '100%',
+  height: 300,
+};
+
 const initialNodes = [
   {
     id: "1",
@@ -100,6 +106,7 @@ const Flow = ({ nodeTypes }) => {
   return (
 
       <ReactFlow
+        style={styles}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -118,7 +125,6 @@ const Flow = ({ nodeTypes }) => {
         attributionPosition="top-right"
       >
         <Controls />
-        <MiniMap />
         <Background variant="dots" gap={50} size={1} />
       </ReactFlow>
   );
