@@ -5,10 +5,12 @@ import './App.css';
 
 import TextNode from "./Nodes/TextNode";
 import ViewNode from "./Nodes/ViewNode";
+import Base64Node from './Nodes/Base64Node';
 
 const nodeTypes = {
   text: TextNode,
   view: ViewNode,
+  base64: Base64Node,
 };
 
 

@@ -11,12 +11,37 @@ const initialNodes = [
   },
   {
     id: "2",
+    type: "base64",
+    data: {},
+    position: { x: 150, y: 100 },
+  },
+  {
+    id: "3",
     type: "view",
     data: {},
     position: { x: 300, y: 0 },
   },
+  {
+    id: "4",
+    type: "base64",
+    data: {},
+    position: { x: 450, y: 100 },
+  },
+  {
+    id: "5",
+    type: "view",
+    data: {},
+    position: { x: 600, y: 0 },
+  },
 ];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+const initialEdges = [
+  { id: 'e-1', source: '1', target: '2' }, 
+  { id: 'e-2', source: '2', target: '3' },
+  { id: 'e-3', source: '3', target: '4' }, 
+  { id: 'e-4', source: '4', target: '5' },
+];
+
+
 
 const getId = (nodes) => {
   var id = nodes.length + 1; // Start with the nodes count

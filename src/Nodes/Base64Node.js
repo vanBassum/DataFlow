@@ -7,41 +7,40 @@ import {
   useNodesData,
 } from "@xyflow/react";
 
-function ViewNode({ id = null }) {
+function Base64Node({ id = null }) {
   const { updateNodeData } = useReactFlow();
-  const [text, setText] = useState("");
-  const [selectedOption, setSelectedOption] = useState("text");
+  const [selectedOption, setSelectedOption] = useState("base64encode");
   const connections = useHandleConnections({ type: "target" });
   const nodesData = useNodesData(connections.map((connection) => connection.source));
-
-  const uint8ArrayToString = (uint8Array) => {
-    const decoder = new TextDecoder();
-    return decoder.decode(uint8Array);
+ 
+  const stringToUint8Array = (str) => {
+    const encoder = new TextEncoder();
+    return encoder.encode(str);
   };
 
-  const uint8ArrayToHexString = (uint8Array) => {
-    return Array.from(uint8Array)
-      .map(byte => byte.toString(16).padStart(2, '0'))
-      .join(' ');
+  function base64Encode(byteArray) {
+    const binaryString = Array.from(byteArray).map(byte => String.fromCharCode(byte)).join('');
+    return stringToUint8Array(btoa(binaryString));
   }
-  
+
+  function base64Decode(byteArray) {
+    const binaryString = Array.from(byteArray).map(byte => String.fromCharCode(byte)).join('');
+    return stringToUint8Array(atob(binaryString));
+  }
+
   const options = useMemo(() => [
-    { value: "text", label: "Text", handler: uint8ArrayToString },
-    { value: "hex", label: "Hex", handler: uint8ArrayToHexString }
+    { value: "base64encode", label: "Base 64 encode", handler: base64Encode  },
+    { value: "base64decode", label: "Base 64 decode", handler: base64Decode  },
   ], []);
-
-
-
 
   useEffect(() => {
     // Input node changed
     if (id !== null) {
       const selectedHandler = options.find(option => option.value === selectedOption)?.handler;
-      if (selectedHandler) {
-        setText(selectedHandler(nodesData[0]?.data?.raw));
+      if (selectedHandler && nodesData[0]?.data?.raw) {
+        var converted = selectedHandler(nodesData[0]?.data?.raw);
+        updateNodeData(id, {raw: converted});
       }
-      // Pass data along unchanged.
-      updateNodeData(id, nodesData[0]?.data);
     }
   }, [id, nodesData, selectedOption, options, updateNodeData]);
 
@@ -68,18 +67,9 @@ function ViewNode({ id = null }) {
           ))}
         </select>
       </div>
-      <div>
-        <textarea
-          value={text}
-          readOnly
-          style={{ backgroundColor: "#f4f4f4", border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
-        />
-      </div>
-
-
       <Handle type="source" position={Position.Right} />
     </div>
   );
 }
 
-export default memo(ViewNode);
+export default memo(Base64Node);
