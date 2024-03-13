@@ -18,7 +18,7 @@ const initialNodes = [
     position: { x: 100, y: 0 },
   },
 ];
-const initialEdges = [];
+const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 const getId = (nodes) => {
   let id = nodes.length + 1; // Start with the nodes count
@@ -89,7 +89,7 @@ const Flow = ({ nodeTypes }) => {
   );
 
   return (
-    <div style={{ flex: 1, height: '100vh', overflow: 'hidden' }}>
+
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -111,7 +111,6 @@ const Flow = ({ nodeTypes }) => {
         <MiniMap />
         <Background variant="dots" gap={15} size={0.5} />
       </ReactFlow>
-    </div>
   );
 };
 

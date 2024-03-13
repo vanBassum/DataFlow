@@ -19,9 +19,12 @@ export default function App() {
       <Sidebar
         nodeTypes={nodeTypes}
       />
-      <Flow
-        nodeTypes={nodeTypes}
-      />
+      <div style={{ flex: 1, height: '100vh', overflow: 'hidden' }}>
+        <Flow
+          nodeTypes={nodeTypes}
+        />
+      </div>
+
     </div>
   );
 
