@@ -24,6 +24,7 @@ const initialNodes = [
   {
     id: "4",
     type: "base64",
+    option: "base64decoding",
     data: {},
     position: { x: 450, y: 100 },
   },

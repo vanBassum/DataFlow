@@ -4,9 +4,9 @@ import {
 } from "@xyflow/react";
 
 
-const TextNode = ({ id, data }) => {
+const TextNode = ({ id }) => {
   const { updateNodeData } = useReactFlow();
-  const [text, setText] = useState(data.text);
+  const [text, setText] = useState("");
 
   const stringToUint8Array = (str) => {
     const encoder = new TextEncoder();
@@ -17,7 +17,7 @@ const TextNode = ({ id, data }) => {
   // The input field changed
   const updateText = (text) => {
     setText(text);
-    data.raw = stringToUint8Array(text);
+    var data = {raw: stringToUint8Array(text)};
     updateNodeData(id, data);
   };
 
