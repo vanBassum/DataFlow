@@ -9,25 +9,25 @@ const initialNodes = [
     data: {
       text: "hello",
     },
-    position: { x: -100, y: -50 },
+    position: { x: 0, y: 0 },
   },
   {
     id: "2",
     type: "view",
     data: {},
-    position: { x: 100, y: 0 },
+    position: { x: 300, y: 0 },
   },
 ];
 const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
 
 const getId = (nodes) => {
-  let id = nodes.length + 1; // Start with the nodes count
-  let subId = 1;
-  let newId = `dndnode_${id}`;
-  while (nodes.some(node => node.id === newId)) {
-    newId = `dndnode_${id}_${subId}`;
-    subId++;
-  }
+  var id = nodes.length + 1; // Start with the nodes count
+  //var subId = 1;
+  var newId = `dndnode_${id}`;
+  //while (nodes.some(node => node.id === newId)) {
+  //  newId = `dndnode_${id}_${subId}`;
+  //  subId++;
+  //}
   return newId;
 };
 
@@ -96,6 +96,7 @@ const Flow = ({ nodeTypes }) => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         snapToGrid
+        snapGrid={[25, 25]}
         onEdgeUpdate={onEdgeUpdate}
         onEdgeUpdateStart={onEdgeUpdateStart}
         onEdgeUpdateEnd={onEdgeUpdateEnd}
@@ -109,7 +110,7 @@ const Flow = ({ nodeTypes }) => {
       >
         <Controls />
         <MiniMap />
-        <Background variant="dots" gap={15} size={0.5} />
+        <Background variant="dots" gap={50} size={1} />
       </ReactFlow>
   );
 };

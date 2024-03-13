@@ -1,6 +1,7 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { } from 'react';
 import Sidebar from './Sidebar';
 import Flow from './Flow';
+import './App.css';
 
 import TextNode from "./Nodes/TextNode";
 import ViewNode from "./Nodes/ViewNode";
@@ -15,17 +16,16 @@ export default function App() {
 
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Sidebar
-        nodeTypes={nodeTypes}
-      />
-      <div style={{ flex: 1, height: '100vh', overflow: 'hidden' }}>
-        <Flow
-          nodeTypes={nodeTypes}
-        />
+    <div className="App">
+      <div className="sidebar">
+        <Sidebar nodeTypes={nodeTypes} />
       </div>
-
+      <div className="main-content">
+        <Flow nodeTypes={nodeTypes} />
+      </div>
     </div>
+
+
   );
 
 }

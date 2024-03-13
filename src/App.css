@@ -1,3 +1,38 @@
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  height: 100%; /* Ensure App div fills the screen */
+}
+
+.sidebar {
+  flex: 0 0 auto;
+  border-right: 1px solid #ccc; /* Add a gray border to the right */
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-flow__node-custom {
+  padding: 10px;
+  background-color: #556677;
+  color: white;
+}
+
+
+
+
+/*
 .App {
   text-align: center;
 }
@@ -37,3 +72,4 @@
     transform: rotate(360deg);
   }
 }
+*/

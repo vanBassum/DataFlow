@@ -25,11 +25,12 @@ const TextNode = ({ id, data }) => {
         borderRadius: 10,
       }}
     >
-      <div>node {id}</div>
+      <div style={{ marginBottom: "8px" }}>Input</div>
       <div>
         <input
           onChange={(event) => updateText(event.target.value)}
           value={text}
+          style={{ border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
         />
       </div>
       <Handle type="source" position={Position.Right} />

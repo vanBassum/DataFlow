@@ -1,18 +1,22 @@
-import React, { memo, useState } from "react";
+import { memo, useEffect } from "react";
 import {
-  Handle,
   Position,
+  useReactFlow,
+  Handle,
   useHandleConnections,
   useNodesData,
 } from "@xyflow/react";
 
-function ViewNode() {
-  const connections = useHandleConnections({
-    type: "target",
-  });
-  const nodesData = useNodesData(
-    connections.map((connection) => connection.source)
-  );
+function ViewNode({ id = null }) {
+  const { updateNodeData } = useReactFlow();
+  const connections = useHandleConnections({ type: "target" });
+  const nodesData = useNodesData(connections.map((connection) => connection.source));
+
+  useEffect(() => {
+    if (id !== null) {
+      updateNodeData(id, { text: nodesData[0]?.data?.text });
+    }
+  }, [id, nodesData]);
 
   return (
     <div
@@ -24,13 +28,22 @@ function ViewNode() {
         borderRadius: 10,
       }}
     >
-      <Handle type="target" position={Position.Left} />
+      <Handle
+        type="target"
+        position={Position.Left}
+        isConnectable={connections.length === 0}
+      />
+      <div style={{ marginBottom: "8px" }}>View</div>
       <div>
-        incoming texts:{" "}
-        {nodesData
-          ?.filter((nodeData) => nodeData.data.text !== undefined)
-          .map(({ data }, i) => <div key={i}>{data.text}</div>) || "none"}
+        <input
+          value={nodesData[0]?.data?.text}
+          readOnly
+          style={{ backgroundColor: "#f4f4f4", border: "1px solid #ccc", padding: "8px", borderRadius: "4px" }}
+        />
       </div>
+
+
+      <Handle type="source" position={Position.Right} />
     </div>
   );
 }
